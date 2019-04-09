@@ -10,38 +10,39 @@
 
 
 
-let i = Math.floor(Math.random()*2);
+(function(){
+function Question(question, answers, correctAnswer){
+   this.question = question;
+   this.answers = answers;
+   this.correct = correctAnswer;
+} 
 
 
-function Question(question, options, answer){
-    this.question = question;
-    this.options = options;
-    this.answer = answer;
-    this.logger = function() {
-        console.log(this.question + this.options[0] + this.options[1] + this.options[2]);
+
+Question.prototype.displayQuestion = function(){
+    console.log(this.question);
+    for (var i = 0; i < this.answers.length; i++) {
+        console.log(i + '. ' + this.answers[i]);
     }
 }
 
-var q1 = new Question('Where were you born?', ['Bloomington', 'Chicago', 'Arkansas'], 1);
-var q2 = new Question('Whats your dog\'s name?', ['Skip', 'Spud', 'Chika'], 3);
-var q3 = new Question('Do you eat cheese?', ['Yes', 'No', 'Sometimes, but I shoudln/t'], 3);
-
-const questions = [q1, q2, q3];
-let asker = questions[i].question + ' 1. ' + questions[i].options[0] + ' 2. ' + questions[i].options[1] + ' 3. '  + questions[i].options[2];
-
-console.log(asker);
-
-let userAnswer = prompt('Input a number to answer the question');
-
-
-
-function CheckAnswer(userAnswer, correctAnswer){
-    this.userAnswer = userAnswer;
-    this.correctAnswer = questions[i].answers;
-    this.verify = function() {
-        if (this.userAnswer = this.correctAnswer) console.log('You are correct')
-     else  console.log('You are incorrect, loser');
-    }
+Question.prototype.checkAnswer = function(answer){
+    if (answer === this.correctAnswer) {console.log('Correct!');
+    }else {console.log('Incorrect!')
+          }
 }
 
-CheckAnswer(userAnswer,questions[i].answer);
+var q1 = new Question ('1?', ['0', '1'], 1);
+var q2 = new Question ('1', ['0', '1'], 1);
+var q3 = new Question ('1', ['0', '1'], 1);
+var questions = [q1, q2, q3];
+
+var n = Math.floor(Math.random()*questions.length);  
+
+
+questions[n].displayQuestion();
+    
+var answer = parseInt(prompt('What is your answer?'), 10);
+    
+questions[n].checkAnswer(answer);
+})();
