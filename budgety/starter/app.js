@@ -3,13 +3,13 @@ var budgetController = (function(){
 
     var Expense = function(id, description, value){
         this.id = id;
-        this. description = description;
+        this.description = description;
         this.value = value;
     }
 
     var Income = function(id, description, value){
         this.id = id;
-        this. description = description;
+        this.description = description;
         this.value = value;
     }
 
@@ -64,7 +64,7 @@ var UIController = (function(){
         inputValue: '.add__value',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
-        expensesContainer: '.expense__list'
+        expensesContainer: '.expenses__list'
     }
 
     return{
@@ -92,6 +92,17 @@ var UIController = (function(){
               //Insert HTML into DOM
               document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
             },
+
+            clearFields: function(){
+                var fields, fieldsArr;
+                var fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+                var fieldsArr = Array.prototype.slice.call(fields);
+                fieldsArr.forEach(function(current, index, array) {
+                    current.value = '';
+                });
+                fieldsArr[0].focus();
+            },
+
         getDOMstrings: function() {
             return DOMstrings;
             }
@@ -124,6 +135,9 @@ var controller = (function(budgetCtrl, UICtrl){
 
          // 3. Add the item to the user interface
          UICtrl.addListItem(newItem, input.type);
+
+         //4. Clear the fields
+         UICtrl.clearFields();
          // 4. Calculate budget
          // 5. Display budget
     };
