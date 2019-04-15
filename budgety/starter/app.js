@@ -86,7 +86,8 @@ var UIController = (function(){
         budgetLabel: '.budget__value',
         incomeLabel: '.budget__income--value',
         expenseLabel: '.budget__expenses--value',
-        percentageLabel: '.budget__expenses--percentage'
+        percentageLabel: '.budget__expenses--percentage',
+        container: '.container'
     }
     return{
         getInput: function() {
@@ -101,10 +102,10 @@ var UIController = (function(){
               //Create HTML string with placeholder text
               if (type === 'inc'){
               element = DOMstrings.incomeContainer;
-              html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+              html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             } else if (type === 'exp'){
               element = DOMstrings.expensesContainer;
-              html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+              html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
             }
               //Replace placeholder text with some data
               newHtml = html.replace('%id%', obj.id);
@@ -150,15 +151,16 @@ var controller = (function(budgetCtrl, UICtrl){
     var setupEventListeners = function() {
         var DOM = UICtrl.getDOMstrings();
         document.querySelector(DOM.inputBtn).addEventListener("click", ctrlAddItem);
-        document.addEventListener('keypress', function(e){
-            if (e.keyCode === 13 || event.which === 13) ctrlAddItem();
-        });
+        document.addEventListener('keypress', function(event){
+            if (event.keyCode === 13 || event.which === 13) ctrlAddItem();
+          });
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
       };
 
     var updateBudget = function() {
       budgetCtrl.calculateBudget();
       var budget = budgetCtrl.getBudget();
-      UIController.displayBudget(budget);
+      UICtrl.displayBudget(budget);
     };
 
     var ctrlAddItem = function(){
@@ -172,11 +174,23 @@ var controller = (function(budgetCtrl, UICtrl){
       }
     };
 
+    var ctrlDeleteItem = function(event) {
+      var itemID, splitID, type, ID;
+      itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+      console.log(itemID);
+      if (itemID) {
+        splitID = itemID.split('-');
+        type = splitID[0];
+        ID = splitID[1];
+      }
+
+    };
+
     return {
         init: function(){
           console.log('App has started');
           setupEventListeners();
-          UIController.displayBudget({
+          UICtrl.displayBudget({
             budget: 0,
             totalInc: 0,
             totalExp: 0,
