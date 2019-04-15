@@ -182,6 +182,7 @@ var controller = (function(budgetCtrl, UICtrl){
         splitID = itemID.split('-');
         type = splitID[0];
         ID = splitID[1];
+
       }
 
     };
